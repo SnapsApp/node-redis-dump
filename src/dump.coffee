@@ -16,12 +16,9 @@ module.exports = (params, callback) ->
 
 class RedisDumper
 
-    constructor: ({port, host, auth}) ->
+    constructor: (uri) ->
         # Connect to redis database
-        if auth?
-            @db = redis.createClient(port, host, {auth_pass: auth})
-        else
-            @db = redis.createClient(port, host)
+        @db = redis.createClient(uri)
 
     close: ->
         # Close redis connection
