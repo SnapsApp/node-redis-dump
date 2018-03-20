@@ -16,9 +16,12 @@ module.exports = (params, callback) ->
 
 class RedisDumper
 
-    constructor: (uri) ->
+    constructor: (uri, options) ->
         # Connect to redis database
-        @db = redis.createClient(uri)
+        if options?
+            @db = redis.createClient(uri, options)
+        else
+            @db = redis.createClient(uri)
 
     close: ->
         # Close redis connection
