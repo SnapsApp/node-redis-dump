@@ -8,6 +8,8 @@ module.exports = (params, callback) ->
     params.db ?= '0'
     params.filter ?= '*'
     params.format ?= 'redis'
+    params.uri ?= 'redis://127.0.0.1'
+    params.options ?= {}
     params.convert ?= null
     dumper = new RedisDumper(params)
     dumper.dump params, (params...) ->
