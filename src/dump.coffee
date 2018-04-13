@@ -11,7 +11,7 @@ module.exports = (params, callback) ->
     params.uri ?= 'redis://127.0.0.1'
     params.options ?= {}
     params.convert ?= null
-    dumper = new RedisDumper(params)
+    dumper = new RedisDumper(params.uri, params.options)
     dumper.dump params, (params...) ->
         dumper.close()
         callback params...

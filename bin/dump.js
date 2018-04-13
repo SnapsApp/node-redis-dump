@@ -32,7 +32,7 @@
     if (params.convert == null) {
       params.convert = null;
     }
-    dumper = new RedisDumper(params);
+    dumper = new RedisDumper(params.uri, params.options);
     return dumper.dump(params, function() {
       var params;
       params = 1 <= arguments.length ? slice.call(arguments, 0) : [];
