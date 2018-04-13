@@ -23,6 +23,12 @@
     if (params.format == null) {
       params.format = 'redis';
     }
+    if (params.uri == null) {
+      params.uri = 'redis://127.0.0.1';
+    }
+    if (params.options == null) {
+      params.options = {};
+    }
     if (params.convert == null) {
       params.convert = null;
     }
@@ -36,12 +42,16 @@
   };
 
   RedisDumper = (function() {
-    function RedisDumper(uri) {
-      this.db = redis.createClient(uri);
+    function RedisDumper(uri, options) {
+      if (options != null) {
+        this.db = redis.createClient(uri, options);
+      } else {
+        this.db = redis.createClient(uri);
+      }
     }
 
     RedisDumper.prototype.close = function() {
-      return this.db.end();
+      return this.db.end(true);
     };
 
     RedisDumper.prototype.escape = function(value) {
