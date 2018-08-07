@@ -41,6 +41,22 @@
     });
   };
 
+  function getAllKeys(db, pattern, callback, cursor, foundKeys) {
+    cursor = cursor || 0;
+    foundKeys = foundKeys || new Set();
+
+    db.scan(cursor, 'MATCH', pattern, 'COUNT', 1000, (err, results) => {
+      if (err) return callback(err);
+      const [nextCursor, nextKeys] = results;
+      nextKeys.forEach(key => keys.add(key.replace('key:', '')));
+
+      if (nextCursor === 0) {
+        return callback(null, Array.from(foundKeys));
+      }
+      return getAllKeys(db, pattern, callback, nextCursor, foundKeys);
+    });
+  }
+
   RedisDumper = (function() {
     function RedisDumper(uri, options) {
       if (options != null) {
@@ -93,7 +109,9 @@
                   return results;
                 })());
               } else {
-                return _this.db.keys(filter, next);
+                // expand this section to fetch all the keys
+                // using a cursor, i.e. the SCAN command
+                return getAllKeys(_this.db, filter, next);
               }
             } catch (error) {
               e = error;
